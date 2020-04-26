@@ -21,6 +21,74 @@ import (
 	"strings"
 )
 
+func NewVolume() *Volume {
+	br := &Volume{
+		CurrentVal: getVolumePercent(),
+	}
+
+	return br
+}
+
+type Volume struct {
+	CurrentVal int
+}
+
+func (b *Volume) up() {
+	currentPercent := b.getPercent()
+
+	levels := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110}
+	for _, level := range levels {
+		if level > currentPercent {
+			b.setPercent(level)
+			break
+		}
+	}
+}
+
+func (b *Volume) down() {
+	currentPercent := b.getPercent()
+
+	levels := []int{100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0}
+	for _, level := range levels {
+		if level < currentPercent {
+			b.setPercent(level)
+			break
+		}
+	}
+}
+
+func (b *Volume) getPercent() int {
+	return b.CurrentVal
+}
+
+func (b *Volume) setPercent(newPercent int) {
+	if newPercent > 100 {
+		newPercent = 100
+	} else if newPercent < 0 {
+		newPercent = 0
+	}
+
+	if newPercent == 0 {
+		muteVolume()
+	} else {
+		unmuteVolume()
+		setVolumePercent(newPercent)
+	}
+}
+
+///
+func muteVolume() {
+	runCmdStringOutput("pactl", []string{"set-sink-mute", "0", "1"})
+}
+
+func unmuteVolume() {
+	runCmdStringOutput("pactl", []string{"set-sink-mute", "0", "0"})
+}
+
+func setVolumePercent(per int) {
+	runCmdStringOutput("pactl", []string{"set-sink-volume", "0", fmt.Sprintf("%d%%", per)})
+}
+
 func getVolumePercent() int {
 	raw := runCmdStringOutput("pactl", []string{"list", "sinks"})
 
@@ -37,8 +105,4 @@ func getVolumePercent() int {
 
 	fmt.Println(raw)
 	return -2 // unkown
-}
-
-func setVolumePercent() int {
-	return 0
 }

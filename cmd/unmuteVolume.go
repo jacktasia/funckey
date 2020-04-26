@@ -18,25 +18,16 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
-var setVolumePercentCmd = &cobra.Command{
-	Use:   "set-percent",
-	Short: "set the current system volume by percent",
-	Args:  validArgPercent,
+var unmuteVolumeCmd = &cobra.Command{
+	Use:   "unmute",
+	Short: "unmute system volume",
 	Run: func(cmd *cobra.Command, args []string) {
-
-		newPercent, err := strconv.Atoi(args[0])
-		if err != nil {
-			panic(err)
-		}
-
-		b := NewBrightness()
-		b.setPercent(newPercent)
+		unmuteVolume()
 	},
 }
 
 func init() {
-	volumeCmd.AddCommand(setVolumePercentCmd)
+	volumeCmd.AddCommand(unmuteVolumeCmd)
 }

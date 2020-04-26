@@ -16,11 +16,31 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
+	"fmt"
+	"github.com/spf13/cobra"
 	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+func validArgPercent(cmd *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		return errors.New("requires a percent argument")
+	}
+
+	i, err := strconv.Atoi(args[0])
+	if err != nil {
+		fmt.Errorf("invalid percent specified: %s", args[0])
+	}
+
+	if i < 5 || i > 100 {
+		return fmt.Errorf("invalid percent specified: %d", i)
+	}
+
+	return nil
+}
 
 func forceInt(s string) int {
 	i, err := strconv.Atoi(s)

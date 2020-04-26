@@ -13,30 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
-var setVolumePercentCmd = &cobra.Command{
-	Use:   "set-percent",
-	Short: "set the current system volume by percent",
-	Args:  validArgPercent,
+var downVolumeCmd = &cobra.Command{
+	Use:   "down",
+	Short: "Decrease screen volume by ~10%",
 	Run: func(cmd *cobra.Command, args []string) {
-
-		newPercent, err := strconv.Atoi(args[0])
-		if err != nil {
-			panic(err)
-		}
-
-		b := NewBrightness()
-		b.setPercent(newPercent)
+		b := NewVolume()
+		b.down()
 	},
 }
 
 func init() {
-	volumeCmd.AddCommand(setVolumePercentCmd)
+	volumeCmd.AddCommand(downVolumeCmd)
 }

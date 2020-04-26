@@ -16,32 +16,14 @@ limitations under the License.
 package cmd
 
 import (
-	"errors"
-	"fmt"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
-// setPercentCmd represents the setPercent command
-var setPercentCmd = &cobra.Command{
+var setBrightnessPercentCmd = &cobra.Command{
 	Use:   "set-percent",
 	Short: "Set screen brightness by percent",
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("requires a percent argument")
-		}
-
-		i, err := strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Errorf("invalid percent specified: %s", args[0])
-		}
-
-		if i < 5 || i > 100 {
-			return fmt.Errorf("invalid percent specified: %d", i)
-		}
-
-		return nil
-	},
+	Args:  validArgPercent,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		newPercent, err := strconv.Atoi(args[0])
@@ -55,6 +37,5 @@ var setPercentCmd = &cobra.Command{
 }
 
 func init() {
-	// rootCmd.AddCommand(setPercentCmd)
-	brightnessCmd.AddCommand(setPercentCmd)
+	brightnessCmd.AddCommand(setBrightnessPercentCmd)
 }
