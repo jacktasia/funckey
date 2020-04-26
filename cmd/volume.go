@@ -22,19 +22,16 @@ import (
 )
 
 func NewVolume() *Volume {
-	br := &Volume{
-		CurrentVal: getVolumePercent(),
-	}
+	br := &Volume{}
 
 	return br
 }
 
 type Volume struct {
-	CurrentVal int
 }
 
 func (b *Volume) up() {
-	currentPercent := b.getPercent()
+	currentPercent := getVolumePercent()
 
 	levels := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110}
 	for _, level := range levels {
@@ -45,8 +42,24 @@ func (b *Volume) up() {
 	}
 }
 
+func (b *Volume) toggleMute() {
+	c := getVolumePercent()
+
+	if c == -1 {
+		unmuteVolume()
+	} else {
+		muteVolume()
+	}
+}
+
 func (b *Volume) down() {
-	currentPercent := b.getPercent()
+	currentPercent := getVolumePercent()
+
+	if currentPercent == -1 { //muted
+		unmuteVolume()
+		b.down()
+		return
+	}
 
 	levels := []int{100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0}
 	for _, level := range levels {
@@ -58,7 +71,7 @@ func (b *Volume) down() {
 }
 
 func (b *Volume) getPercent() int {
-	return b.CurrentVal
+	return getVolumePercent()
 }
 
 func (b *Volume) setPercent(newPercent int) {
@@ -68,10 +81,12 @@ func (b *Volume) setPercent(newPercent int) {
 		newPercent = 0
 	}
 
-	if newPercent == 0 {
+	curPercent := getVolumePercent()
+	if curPercent == -1 {
+		unmuteVolume()
+	} else if newPercent == 0 {
 		muteVolume()
 	} else {
-		unmuteVolume()
 		setVolumePercent(newPercent)
 	}
 }
