@@ -16,63 +16,38 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 )
 
-func NewBrightness() *Brightness {
-	br := &Brightness{
-		MaxVal:     getMaxScreenBrightness(),
-		CurrentVal: getCurrentScreenBrightness(),
+func forceInt(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
 	}
 
-	return br
+	return i
 }
 
-type Brightness struct {
-	MaxVal     int
-	CurrentVal int
-}
+func extractTextByRegex(text string, regex string) string {
+	//matches := []string{}
+	r := regexp.MustCompile(regex)
 
-func (b *Brightness) up() {
-	currentPercent := b.getPercent()
+	// if !strings.Contains(regex, "(") && !strings.Contains(regex, ")") {
+	// 	log.Warnf("Regex pattern: %s appears to have no capture group!", regex)
+	// }
 
-	levels := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
-	for _, level := range levels {
-		if level > currentPercent {
-			b.setPercent(level)
-			break
+	rawMatches := r.FindAllStringSubmatch(text, -1)
+	for _, m := range rawMatches {
+		if len(m) > 1 {
+			return strings.Trim(m[1], "\n")
+			//matches = append(matches, m[1])
 		}
 	}
-}
 
-func (b *Brightness) down() {
-	currentPercent := b.getPercent()
-
-	levels := []int{100, 90, 80, 70, 60, 50, 40, 30, 20, 10}
-	for _, level := range levels {
-		if level < currentPercent {
-			b.setPercent(level)
-			break
-		}
-	}
-}
-
-func (b *Brightness) getPercent() int {
-	return int((float64(b.CurrentVal) / float64(b.MaxVal)) * 100)
-}
-
-func (b *Brightness) setPercent(newPercent int) {
-	if newPercent < 5 {
-		newPercent = 5
-	} else if newPercent > 100 {
-		newPercent = 100
-	}
-
-	newVal := int(float64(newPercent) / float64(99.9) * float64(b.MaxVal))
-	setScreenBrightness(newVal)
+	return "" // joinMatches(matches)
 }
 
 func runCmdStringOutput(app string, args []string) string {
@@ -88,25 +63,5 @@ func runCmdStringOutput(app string, args []string) string {
 
 func runCmdIntOutput(app string, args []string) int {
 	result := runCmdStringOutput(app, args)
-	i, err := strconv.Atoi(result)
-	if err != nil {
-		panic(err)
-	}
-
-	return i
-}
-
-func getCurrentScreenBrightness() int {
-	return runCmdIntOutput("cat", []string{"/sys/class/backlight/intel_backlight/actual_brightness"})
-}
-
-func getMaxScreenBrightness() int {
-	return runCmdIntOutput("cat", []string{"/sys/class/backlight/intel_backlight/max_brightness"})
-}
-
-func setScreenBrightness(val int) {
-	// `sudo` before `tee`
-	args := []string{"-c", fmt.Sprintf("echo %s |  tee /sys/class/backlight/intel_backlight/brightness", strconv.Itoa(val))}
-	cmd := exec.Command("/bin/bash", args...)
-	cmd.Output()
+	return forceInt(result)
 }
