@@ -16,15 +16,17 @@ Ensure you have `pactl` installed
 
 and
 
-``/sys/class/backlight/intel_backlight/brightness` exists.
+that the `/sys/class/backlight/intel_backlight/brightness` file exists.
 
-### brightness permissions
+### `brightness` file permissions
 
-Your user needs to be able to edit the `brightness` file:
+By default the `brigthness` file is not owned by root.
 
-`chown jack:jack /sys/class/backlight/intel_backlight/brightness`
+Your user needs to be able to edit the `brightness` file, change `jack` to your username:
 
-or
+`sudo chown jack:jack /sys/class/backlight/intel_backlight/brightness`
+
+This will change the permissions for just this boot. To change the permissions going forward do this:
 
 `sudo nano /etc/udev/rules.d/90-myrules.rules` and add a line with:
 
@@ -51,7 +53,7 @@ KERNEL=="intel_backlight", SUBSYSTEM=="backlight", RUN+="/usr/bin/find /sys/clas
 * `funckey brightness status` Set the screen brightness status
 
 
-### xomand keybindings
+### `xomand` keybindings
 
 A snippet of my `xmonad.hs` config using `import XMonad.Util.EZConfig`:
 
@@ -63,7 +65,7 @@ A snippet of my `xmonad.hs` config using `import XMonad.Util.EZConfig`:
   ("<XF86AudioMute>", spawn "funckey volume toggle-mute")
 ```
 
-### xobar status config
+### `xmobar` config
 
 In the `commands` section of the config:
 
