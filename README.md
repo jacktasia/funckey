@@ -30,6 +30,7 @@ This will change the permissions for just this boot. To change the permissions g
 
 `sudo nano /etc/udev/rules.d/90-myrules.rules` and add a line with:
 
+Again, make sure you update your username here (replace `jack`) too.
 ```
 KERNEL=="intel_backlight", SUBSYSTEM=="backlight", RUN+="/usr/bin/find /sys/class/backlight/intel_backlight/ -type f -name brightness -exec chown jack:jack {} ; -exec chmod 666 {} ;"
 ```
