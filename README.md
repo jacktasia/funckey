@@ -2,7 +2,7 @@
 
 `funckey` is a simple go cli program that wraps lower level linux cli apps that are commonly mapped to function keys on laptops.
 
-I made this so I could easily map by `volume` and `brightness` function keys on my laptop to work when running [`xmonand`](https://xmonad.org/) and [`xmobar`](https://hackage.haskell.org/package/xmobar) (see config examples below). If you're using gnome/kde you probably don't need something like this.
+I made this so I could easily map my `volume` and `brightness` function keys on my laptop to work when running [`xmonand`](https://xmonad.org/) and [`xmobar`](https://hackage.haskell.org/package/xmobar) (see config examples below). If you're using gnome/kde you probably don't need something like this.
 
 ## Setup / Install
 
