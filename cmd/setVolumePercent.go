@@ -23,7 +23,7 @@ import (
 
 var setVolumePercentCmd = &cobra.Command{
 	Use:   "set-percent",
-	Short: "set the current system volume by percent",
+	Short: "Set the system volume by percent",
 	Args:  validArgPercent,
 	Run: func(cmd *cobra.Command, args []string) {
 

@@ -21,7 +21,7 @@ import (
 
 var upVolumeCmd = &cobra.Command{
 	Use:   "up",
-	Short: "Increase screen volume by ~10%",
+	Short: "Increase system volume by ~10%",
 	Run: func(cmd *cobra.Command, args []string) {
 		b := NewVolume()
 		b.up()

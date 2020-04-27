@@ -23,7 +23,7 @@ import (
 
 var getVolumePercentCmd = &cobra.Command{
 	Use:   "get-percent",
-	Short: "get the current system volume",
+	Short: "Get the system volume",
 	Run: func(cmd *cobra.Command, args []string) {
 		percent := getVolumePercent()
 		if percent == -1 {

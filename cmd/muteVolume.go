@@ -22,7 +22,7 @@ import (
 
 var muteVolumeCmd = &cobra.Command{
 	Use:   "mute",
-	Short: "mute system volume",
+	Short: "Mute system volume",
 	Run: func(cmd *cobra.Command, args []string) {
 		muteVolume()
 	},

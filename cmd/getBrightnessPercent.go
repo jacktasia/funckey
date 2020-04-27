@@ -23,7 +23,7 @@ import (
 
 var getBrightnessPercentCmd = &cobra.Command{
 	Use:   "get-percent",
-	Short: "get the current screen brightness percent",
+	Short: "Get the current screen brightness percent",
 	Run: func(cmd *cobra.Command, args []string) {
 		b := NewBrightness()
 		fmt.Printf("%d%%\n", b.getPercent())
