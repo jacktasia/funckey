@@ -20,7 +20,7 @@ that the `/sys/class/backlight/intel_backlight/brightness` file exists.
 
 ### `brightness` file permissions
 
-By default the `brigthness` file is not owned by root.
+By default the `brightness` file is owned by root.
 
 Your user needs to be able to edit the `brightness` file, change `jack` to your username:
 
